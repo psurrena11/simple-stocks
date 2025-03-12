@@ -1,0 +1,10 @@
+.stock-card {
+    border: 1px solid $grey;
+    background-color: $swiss-red;
+    color: $white;
+    padding: $space-md;
+
+    @include mobile {
+        padding: $space-sm;
+    }
+}
