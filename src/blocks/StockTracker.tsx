@@ -1,6 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import { StockData, ApiResponse } from '../types';
-import StockAstrology from './StockAstrology'
+import StockEntriesList from './StockEntriesList';
+import StockAstrology from './StockAstrology';
 
 const StockTracker: React.FC = () => {
   const [symbol, setSymbol] = useState<string>('');
@@ -76,55 +77,41 @@ const StockTracker: React.FC = () => {
 
   return (
     <div className="stock-tracker">
-      <h1>Celestial Stock Tracker</h1>
-      <p className="astro-intro">Discover your stocks' cosmic destiny</p>
+      <h1>Stock<br/>Tracker</h1>
       
-      <form onSubmit={handleSubmit} className="stock-form">
-        <input
-          type="text"
-          value={symbol}
-          onChange={(e) => setSymbol(e.target.value)}
-          placeholder="Enter stock symbol (e.g., IBM)"
-          className="stock-input"
-        />
-        <button type="submit" className="submit-btn" disabled={isLoading || !symbol.trim()}>
-          {isLoading ? 'Loading...' : 'Track Stock'}
-        </button>
-      </form>
-      
-      {error && <div className="error-message">{error}</div>}
-      
-      <div className="stock-entries">
-        {stockEntries.map((entry, index) => (
-          <div key={index} className="stock-card">
-            <div className="stock-header">
-              <h2>{entry.symbol}</h2>
-              <button 
-                className="delete-btn" 
-                onClick={() => handleDelete(index)}
-                aria-label="Delete"
-              >
-                ×
-              </button>
-            </div>
-            <div className="stock-details">
-              <p className="open-price">Opening: ${parseFloat(entry.open).toFixed(2)}</p>
-              <p className="timestamp">As of: {new Date(entry.timestamp).toLocaleString()}</p>
-              <StockAstrology 
-                symbol={entry.symbol} 
-                openPrice={entry.open} 
-                timestamp={entry.timestamp} 
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-      
-      {stockEntries.length === 0 && (
-        <div className="empty-state">
-          <p>Enter a stock symbol above to start tracking</p>
+      <section>
+        <div class="toolbar">
+          <form onSubmit={handleSubmit} className="stock-form">
+            <input
+              type="text"
+              value={symbol}
+              onChange={(e) => setSymbol(e.target.value)}
+              placeholder="Enter stock symbol (e.g., IBM)"
+              className="stock-input"
+            />
+            <button type="submit" className="submit-btn" disabled={isLoading || !symbol.trim()}>
+              {isLoading ? 'Loading...' : 'Track Stock'}
+            </button>
+          </form>
+          
+          {error && <div className="error-message">{error}</div>}
         </div>
-      )}
+      </section>
+
+      <section> 
+        <div className="stock-tracker-main">
+          <div className="stock-list-container">
+            <StockEntriesList 
+              entries={stockEntries} 
+              onDelete={handleDelete} 
+            />
+          </div>
+          
+          <div className="astrology-container">
+            <StockAstrology stockEntries={stockEntries} />
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

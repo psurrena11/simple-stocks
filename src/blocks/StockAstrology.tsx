@@ -1,12 +1,24 @@
 import React from 'react';
+import { StockData } from '../types';
 
 interface StockAstrologyProps {
-  symbol: string;
-  openPrice: string;
-  timestamp: string;
+  stockEntries: StockData[];
 }
 
-const StockAstrology: React.FC<StockAstrologyProps> = ({ symbol, openPrice, timestamp }) => {
+const StockAstrology: React.FC<StockAstrologyProps> = ({ stockEntries }) => {
+  // If no stocks, show a placeholder message
+  if (stockEntries.length === 0) {
+    return (
+      <div className="astro-section astro-empty">
+        <p className="sign">✨ Cosmic Forecast</p>
+        <p className="fortune">Add stocks above to see their astrological forecast</p>
+      </div>
+    );
+  }
+
+  // Use the most recently added stock for the astrological reading
+  const latestStock = stockEntries[stockEntries.length - 1];
+  
   const renderAstrologicalSign = (timestamp: string): string => {
     const date = new Date(timestamp);
     const month = date.getMonth() + 1; // JS months are 0-indexed
@@ -52,10 +64,12 @@ const StockAstrology: React.FC<StockAstrologyProps> = ({ symbol, openPrice, time
     "The moon's phase suggests this is a time of new beginnings."
   ];
 
+  // Display which stock we're showing the fortune for
   return (
-    <div className="astro-section">
-      <p className="sign">{renderAstrologicalSign(timestamp)}</p>
-      <p className="fortune">{getStockFortune(symbol, openPrice)}</p>
+    <div className="astro-section astro-global">
+      <h3 className="astro-title">Cosmic Forecast for {latestStock.symbol}</h3>
+      <p className="sign">{renderAstrologicalSign(latestStock.timestamp)}</p>
+      <p className="fortune">{getStockFortune(latestStock.symbol, latestStock.open)}</p>
     </div>
   );
 };

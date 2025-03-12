@@ -1,8 +1,15 @@
+.stock-entries {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-gap: $space-sm;
+}
+
 .stock-card {
-    border: 1px solid $grey;
+    border: 2px solid $white;
     background-color: $swiss-red;
     color: $white;
     padding: $space-md;
+    filter: drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.15));
 
     @include mobile {
         padding: $space-sm;
