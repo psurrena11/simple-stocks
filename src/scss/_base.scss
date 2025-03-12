@@ -27,7 +27,7 @@ section {
 .stock-tracker {
     padding: $space-lg;
     height: 100%;
-   
+    background-color: red;
 
     @include mobile {
         padding: $space-md;

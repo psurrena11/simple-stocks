@@ -1,10 +1,10 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
 import { StockData, ApiResponse } from '../types';
 import StockEntriesList from './StockEntriesList';
 import StockAstrology from './StockAstrology';
+import StockForm from './StockForm';
 
 const StockTracker: React.FC = () => {
-  const [symbol, setSymbol] = useState<string>('');
   const [stockEntries, setStockEntries] = useState<StockData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -60,14 +60,6 @@ const StockTracker: React.FC = () => {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
     } finally {
       setIsLoading(false);
-      setSymbol(''); // Clear the input field
-    }
-  };
-
-  const handleSubmit = (e: FormEvent): void => {
-    e.preventDefault();
-    if (symbol.trim()) {
-      fetchStockData(symbol.trim());
     }
   };
 
@@ -80,25 +72,11 @@ const StockTracker: React.FC = () => {
       <h1>Stock<br/>Tracker</h1>
       
       <section>
-        <div class="toolbar">
-          <form onSubmit={handleSubmit} className="stock-form">
-            <input
-              type="text"
-              value={symbol}
-              onChange={(e) => setSymbol(e.target.value)}
-              placeholder="Enter stock symbol (e.g., IBM)"
-              className="stock-input"
-            />
-            <button type="submit" className="submit-btn" disabled={isLoading || !symbol.trim()}>
-              {isLoading ? 'Loading...' : 'Track Stock'}
-            </button>
-          </form>
-          
-          {error && <div className="error-message">{error}</div>}
-        </div>
+        <StockForm onSubmit={fetchStockData} isLoading={isLoading} />
+        {error && <div className="error-message">{error}</div>}
       </section>
-
-      <section> 
+      
+      <section>    
         <div className="stock-tracker-main">
           <div className="stock-list-container">
             <StockEntriesList 
